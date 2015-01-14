@@ -1,4 +1,6 @@
 adapter: postgresql
-database: nested_hstore_test
-username: postgres
-password:
+encoding: utf8
+pool: 5
+host: localhost
+port: 5000
+database: hstore_test

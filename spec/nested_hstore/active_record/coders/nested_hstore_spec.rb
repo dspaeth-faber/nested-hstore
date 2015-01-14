@@ -24,5 +24,24 @@ describe ActiveRecord::Coders::NestedHstore do
         post.properties.should == value
       end
     end
+
+    context "with a nested array" do
+      let(:value) { { 'foo' => { 'bar' => 'baz' } } }
+
+      it "preserves the value" do
+        post = Post.new
+        post.attributes = { properties:{"a"=>[{"b"=>"c"}], "d"=>"e"} }
+        post.save!
+
+        loaded_post = Post.find post.id
+        loaded_post.attributes = { properties: {"a"=>[{"b"=>"c", "h" => "j"}], "d"=>"e"} }
+
+        loaded_post.save!
+
+        loaded_post = Post.find post.id
+
+        expect(loaded_post.properties).to eq({"a"=>[{"b"=>"c", "h" => "j"}], "d"=>"e"})
+      end
+    end
   end
 end
